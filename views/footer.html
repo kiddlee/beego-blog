@@ -1,0 +1,105 @@
+<footer role="contentinfo">
+  <!--
+  <ul class="copyright">
+    <li>&copy; <a href="{{ url('about') }}">Shulei Lee</a></li>
+    <li><a href="http://github.com/ohida/pochika">Powered by</a>
+  </ul>
+  <ul class="footer-icons">
+    <li><a data-pjax href="/"><span class="icon" data-icon="&#x21;"></span></a></li>
+    <li><a data-pjax href="{{ url('search') }}"><span class="icon" data-icon="&#x22;"></span></a></li>
+    <li><a href="{{ url('feed') }}"><span class="icon" data-icon="&#x23;"></span></a></li>
+  </ul>
+  -->
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257559371'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1257559371%26show%3Dpic2' type='text/javascript'%3E%3C/script%3E"));</script>
+  <br />
+</footer>
+<script src="/static/js/jquery.highlight.js"></script>
+<script src="/static/js/jquery.pjax.js"></script>
+<script src="/static/js/prettify.js"></script>
+<div id="loading">
+  LOADING
+</div>
+
+<script>
+  $(function(){
+    prettify();
+
+    $(window).scroll(function() {
+      var yPos = $(window).scrollTop();
+      if (yPos > 240) {
+        $("#subnav").fadeIn();
+      } else {
+        $("#subnav").fadeOut();
+      }
+    });
+
+  });
+</script>
+
+<script>
+  /**
+   * pjax initialize
+   */
+    $(document).pjax('[data-pjax] a, a[data-pjax]', {
+      container: '#pjax-container',
+      fragment: '#pjax-container'
+    })
+    .on('pjax:send', function() {
+      $('#loading').show();
+    })
+    .on('pjax:complete', function() {
+      $('#loading').fadeOut('slow');
+      prettify();
+    })
+    .on('pjax:end', function() {
+    });
+
+  function prettify() {
+    $('.post pre, .content pre, table code').addClass('prettyprint');
+    prettyPrint();
+  }
+
+  function highlight(keyword) {
+    $('article h2,.post-content,.tags').highlight(keyword, {element:'mark'});
+  }
+
+  /**
+   * pjax for read more
+   */
+  function load_post(e) {
+    var url = e.href + '?format=content';
+    //todo
+    var p = $(e).parent().parent();
+    $.ajax({
+      url: url,
+      dataType: 'html',
+      success: function(res) {
+        p.html(res);
+      },
+      complete: function() {
+        $('#loading').fadeOut('slow')
+        prettify();
+        highlight('{{ config('my.query') }}');
+      }
+    });
+    $('#loading').show()
+    return false;
+  }
+</script>
+  <a href="https://github.com/kiddlee/blog" class="github-ribbon">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
+  </a>
+  <aside id="subnav" data-pjax>
+    <div class="wrap">
+      <div class="site-title">
+        <a href="{{ url('/') }}">{{ config('my.title') }}</a>
+      </div>
+      <ul class="nav">
+        <li><a href="{{ url('about') }}">About</a></li>
+        <li><a href="{{ url('archives') }}">Archives</a></li>
+        <li><a href="{{ url('search') }}">Search</a></li>
+      </ul>
+    </div>
+  </aside>
+</body>
+</html>
