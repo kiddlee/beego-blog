@@ -33,3 +33,10 @@ func (c *MainController) AbountMe() {
 	c.Data["post"] = post
     c.TplName = "aboutme.tpl"
 }
+
+// @router /archives [get]
+func (c *MainController) Archives() {
+    post := models.GetAboutMe()
+	c.Data["post"] = post
+    c.TplName = "archives.tpl"
+}
