@@ -38,15 +38,17 @@ func GetPosts() []Post {
 	for _, f := range files {
         file_arr := strings.Split(f, "/")
         file_name := file_arr[len(file_arr) - 1]
-		fileread, _ := ioutil.ReadFile(f)
-		lines := strings.Split(string(fileread), "\n")
-		title := string(lines[0])
-		date := string(lines[1])
-		tags := strings.Split(lines[2], " ")
-		summary := string(lines[3])
-		body := strings.Join(lines[3:len(lines)], "\n")
-		body = string(blackfriday.MarkdownCommon([]byte(body)))
-		posts = append(posts, Post{title, date, tags, summary, body, file_name})
+        if file_name != "code" && file_name != "images" {
+    		fileread, _ := ioutil.ReadFile(f)
+    		lines := strings.Split(string(fileread), "\n")
+    		title := string(lines[0])
+    		date := string(lines[1])
+    		tags := strings.Split(lines[2], ",")
+    		summary := string(lines[3])
+    		body := strings.Join(lines[3:len(lines)], "\n")
+    		body = string(blackfriday.MarkdownCommon([]byte(body)))
+    		posts = append(posts, Post{title, date, tags, summary, body, file_name})
+        }
 	}
     sort.Sort(sort.Reverse(posts))
 	return posts
@@ -59,7 +61,7 @@ func GetPost(file_name string) Post {
 	lines := strings.Split(string(fileread), "\n")
 	title := string(lines[0])
 	date := string(lines[1])
-	tags := strings.Split(lines[2], " ")
+	tags := strings.Split(lines[2], ",")
 	summary := string(lines[3])
 	body := strings.Join(lines[4:len(lines)], "\n")
 	body = string(blackfriday.MarkdownCommon([]byte(body)))

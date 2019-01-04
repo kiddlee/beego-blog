@@ -36,7 +36,8 @@ func (c *MainController) AbountMe() {
 
 // @router /archives [get]
 func (c *MainController) Archives() {
-    post := models.GetAboutMe()
-	c.Data["post"] = post
+    posts := models.GetPosts()
+    logs.Info(posts)
+	c.Data["posts"] = posts
     c.TplName = "archives.tpl"
 }
