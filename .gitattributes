@@ -10,4 +10,4 @@
 *.gitattributes text
 .gitignore text
 *.md text
-*.css linguist-language=Go
+*.go linguist-language=go
